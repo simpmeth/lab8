@@ -101,22 +101,11 @@ namespace lab8_2
             this.LayoutMdi(MdiLayout.TileHorizontal);
         }
 
-        private void заданиеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void документToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-
-        }
 
         private void добавитьСтолбецToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
-
-
             var column = new DataGridViewColumn();
             column.HeaderText = "column" + (dataGridView.Columns.Count);
             column.Name = "column" + (dataGridView.Columns.Count); 
@@ -127,12 +116,14 @@ namespace lab8_2
 
         private void добавитьСтрокуToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
             dataGridView.Rows.Add();
         }
 
         private void удалитьСтолбецToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
             if (dataGridView.SelectedCells.Count!=0 )
             for (int i = 0; i <= dataGridView.SelectedCells.Count-1; i++) {
@@ -143,18 +134,25 @@ namespace lab8_2
 
         private void удалитьСтрокуToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
             if (dataGridView.SelectedCells.Count != 0)
                 for (int i = 0; i <= dataGridView.SelectedCells.Count-1; i++)
                 {
+
                     var index = dataGridView.SelectedCells[i].RowIndex;
+                    if (!dataGridView.CurrentRow.IsNewRow)
                     dataGridView.Rows.RemoveAt(index);
                 }
         }
 
+
+      
         private void среднееЗначениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
            try {
+                
+                if (this.ActiveMdiChild.Controls.Count == 0) return;
                 var result = (double)0;
                 var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
                 if (dataGridView.SelectedCells.Count != 0)
@@ -176,7 +174,7 @@ namespace lab8_2
             try
             {
                 var result = string.Empty;
-
+                if (this.ActiveMdiChild.Controls.Count == 0) return;
                 var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
                 if (dataGridView.SelectedCells.Count != 0)
                     for (int i = 0; i <= dataGridView.SelectedCells.Count - 1; i++)
@@ -269,6 +267,7 @@ namespace lab8_2
 
         private void сохранениеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
@@ -317,6 +316,7 @@ namespace lab8_2
 
         private void сохранениеТаблицыВФайлФорматаExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Excel Documents (*.xls)|*.xls";
@@ -369,6 +369,7 @@ namespace lab8_2
 
         private void сохранениеТаблицыВФайлФорматаWordToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.ActiveMdiChild.Controls.Count == 0) return;
             var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
 
             SaveFileDialog sfd = new SaveFileDialog();
