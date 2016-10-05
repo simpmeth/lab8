@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace lab8_2
 {
@@ -197,6 +199,105 @@ namespace lab8_2
         private void открытиеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void сохранениеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
+
+        private void сохранениеТаблицыВФайлФорматаExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel Documents (*.xls)|*.xls";
+            sfd.FileName = "Inventory_Adjustment_Export.xls";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                
+                copyAlltoClipboard();
+
+                object misValue = System.Reflection.Missing.Value;
+                Excel.Application xlexcel = new Excel.Application();
+
+                xlexcel.DisplayAlerts = false; 
+                Excel.Workbook xlWorkBook = xlexcel.Workbooks.Add(misValue);
+                Excel.Worksheet xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                
+                Excel.Range rng = xlWorkSheet.get_Range("D:D").Cells;
+                rng.NumberFormat = "@";
+
+                
+                Excel.Range CR = (Excel.Range)xlWorkSheet.Cells[1, 1];
+                CR.Select();
+                xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
+
+                Excel.Range delRng = xlWorkSheet.get_Range("A:A").Cells;
+                delRng.Delete(Type.Missing);
+                xlWorkSheet.get_Range("A1").Select();
+
+                
+                xlWorkBook.SaveAs(sfd.FileName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+                xlexcel.DisplayAlerts = true;
+                xlWorkBook.Close(true, misValue, misValue);
+                xlexcel.Quit();
+
+                releaseObject(xlWorkSheet);
+                releaseObject(xlWorkBook);
+                releaseObject(xlexcel);
+
+               
+                Clipboard.Clear();
+                dataGridView.ClearSelection();
+
+                
+                if (File.Exists(sfd.FileName))
+                    System.Diagnostics.Process.Start(sfd.FileName);
+            }
+
+        }
+
+        private void сохранениеТаблицыВФайлФорматаWordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        
+
+        private void copyAlltoClipboard()
+        {
+            var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
+            dataGridView.SelectAll();
+            DataObject dataObj = dataGridView.GetClipboardContent();
+            if (dataObj != null)
+                Clipboard.SetDataObject(dataObj);
+        }
+
+        private void releaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+                
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
     }
 }
