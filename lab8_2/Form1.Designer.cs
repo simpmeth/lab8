@@ -268,6 +268,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(36, 29);
             this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.ToolTipText = "открытие файла собственного формата";
             this.toolStripButton2.Click += new System.EventHandler(this.открытиеФайлаСобственногоФорматаToolStripMenuItem_Click);
             // 
             // toolStripButton3
@@ -288,7 +289,7 @@
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(36, 29);
-            this.toolStripButton4.Text = "toolStripButton4";
+            this.toolStripButton4.Text = "сохранение файла собственного формата";
             this.toolStripButton4.Click += new System.EventHandler(this.сохранениеФайлаСобственногоФорматаToolStripMenuItem_Click);
             // 
             // toolStripButton5
@@ -299,6 +300,7 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(36, 29);
             this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.ToolTipText = "сохранение таблицы в файл формата Excel";
             this.toolStripButton5.Click += new System.EventHandler(this.сохранениеТаблицыВФайлФорматаExcelToolStripMenuItem_Click);
             // 
             // toolStripButton6

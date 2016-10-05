@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -199,6 +202,63 @@ namespace lab8_2
         private void открытиеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+
+            string filename = "";
+            var ofd = new OpenFileDialog();
+            ofd.Filter = "FILE (*.file)|*.file";
+            ofd.FileName = "Output.file";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+
+                var form = new Form();
+                form.MdiParent = this;
+                form.Show();
+                form.FormClosing += new FormClosingEventHandler(this.Editor_FormClosing);
+
+
+                Type t = typeof(Form);
+                PropertyInfo pi = t.GetProperty("MdiClient", BindingFlags.Instance | BindingFlags.NonPublic);
+                MdiClient cli = (MdiClient)pi.GetValue(form.MdiParent, null);
+                ActiveMdiChild.Location = new Point(0, 0);
+                ActiveMdiChild.Size = new Size(cli.Width - 4, cli.Height - 4);
+
+                var dataGridView = new DataGridView();
+                dataGridView.Dock = DockStyle.Fill;
+                dataGridView.ContextMenuStrip = contextMenuStrip1;
+
+                
+
+
+                form.Controls.Add(dataGridView);
+
+                var isColumnName = true;
+                using (FileStream file = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096))
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var fields = reader.ReadLine().Split(',');
+                        if (fields.Length >= 2 && (fields[0] != "" || fields[1] != ""))
+                        {
+                            if (isColumnName)
+                            {
+                                foreach (string header in fields)
+                                {
+                                    var column = new DataGridViewColumn();
+                                    column.HeaderText = header.ToString();
+                                    column.Name = header.ToString();
+                                    column.CellTemplate = new DataGridViewTextBoxCell();
+                                    dataGridView.Columns.Add(column);
+                                }
+
+                                isColumnName = false;
+                            }
+                            else
+                            dataGridView.Rows.Add(fields);
+                        }
+                    }
+                }
+            }
         }
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -208,7 +268,48 @@ namespace lab8_2
 
         private void сохранениеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var dataGridView = this.ActiveMdiChild.Controls[0] as DataGridView;
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "FILE (*.file)|*.file";
+            sfd.FileName = "Output.file";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                
+                if (File.Exists(filename))
+                {
+                    try
+                    {
+                        File.Delete(filename);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("Невозможно сохранить." + ex.Message);
+                    }
+                }
+                int columnCount = dataGridView.ColumnCount;
+                string columnNames = "";
+                string[] output = new string[dataGridView.RowCount + 1];
+                for (int i = 0; i < columnCount; i++)
+                {
+                    columnNames += dataGridView.Columns[i].Name.ToString() + ",";
+                }
+                columnNames= columnNames.Remove(columnNames.Length - 1);
+                output[0] += columnNames;
+                for (int i = 1; (i - 1) < dataGridView.RowCount; i++)
+                {
+                    for (int j = 0; j < columnCount; j++)
+                    {
+                        var str = dataGridView.Rows[i - 1].Cells[j].Value;
+                        if (str == null) str = string.Empty;
 
+                        output[i] += str.ToString() + ",";
+                    }
+                    output[i]= output[i].Remove(output[i].Length - 1);
+                }
+                File.WriteAllLines(sfd.FileName, output, System.Text.Encoding.UTF8);
+                MessageBox.Show("Сохранено");
+            }
         }
 
         
