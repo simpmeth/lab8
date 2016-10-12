@@ -1,6 +1,6 @@
 ﻿namespace lab8_2
 {
-    partial class SplashScreen
+    partial class MySplashScreen
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashScreen));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MySplashScreen));
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -40,7 +40,7 @@
             this.label1.Size = new System.Drawing.Size(249, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Текстовая информацией о данном приложении";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+
             // 
             // SplashScreen
             // 
@@ -53,7 +53,7 @@
             this.MinimizeBox = false;
             this.Name = "SplashScreen";
             this.Text = "SplashScreen";
-            this.Load += new System.EventHandler(this.SplashScreen_Load);
+            
             
             this.ResumeLayout(false);
             this.PerformLayout();

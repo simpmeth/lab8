@@ -63,11 +63,13 @@ namespace lab8_2
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             var result = MessageBox.Show("Хотите выйти?", "", MessageBoxButtons.YesNo);
-            if ( result== DialogResult.No)
+            if (result == DialogResult.Yes)
             {
-                
-                e.Cancel = true;                
+
+              
+               
             }
+            else { e.Cancel = true; }
         }
 
         private void Editor_FormClosing(object sender, FormClosingEventArgs e)
@@ -179,7 +181,6 @@ namespace lab8_2
                 if (dataGridView.SelectedCells.Count != 0)
                     for (int i = 0; i <= dataGridView.SelectedCells.Count - 1; i++)
                     {
-                        var intValue = (double)0;
                         var value =  dataGridView.SelectedCells[i].Value as string;
                         if (value !=null)
                         if (value.Length < 4)
@@ -200,9 +201,7 @@ namespace lab8_2
 
         private void открытиеФайлаСобственногоФорматаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-
-            string filename = "";
+                       
             var ofd = new OpenFileDialog();
             ofd.Filter = "FILE (*.file)|*.file";
             ofd.FileName = "Output.file";
@@ -393,21 +392,20 @@ namespace lab8_2
                 int RowCount = DGV.Rows.Count;
                 int ColumnCount = DGV.Columns.Count;
                 Object[,] DataArray = new object[RowCount + 1, ColumnCount + 1];
-
-                //add rows
+                                
                 int r = 0;
                 for (int c = 0; c <= ColumnCount - 1; c++)
                 {
                     for (r = 0; r <= RowCount - 1; r++)
                     {
                         DataArray[r, c] = DGV.Rows[r].Cells[c].Value;
-                    } //end row loop
-                } //end column loop
+                    }
+                } 
 
                 Word.Document oDoc = new Word.Document();
                 oDoc.Application.Visible = true;
 
-                //page orintation
+                
                 oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;
 
 
@@ -473,7 +471,7 @@ namespace lab8_2
                 //save the file
                 oDoc.SaveAs2(filename);
 
-                //NASSIM LOUCHANI
+                
             }
         }
 
